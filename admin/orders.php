@@ -13,24 +13,22 @@ if (!isset($_SESSION['user_id']) || $_SESSION['user_role'] !== 'admin') {
 }
 
 // Handle order status updates
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && isset($_POST['order_id'])) {
-    $order_id = $_POST['order_id'];
-    $action = $_POST['action'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id']) && isset($_POST['status'])) {
+    $order_id = (int)$_POST['order_id'];
+    $status = $_POST['status'];
     
-    if ($action === 'update_status') {
-        $new_status = $_POST['new_status'];
-        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
-        $stmt->bind_param("si", $new_status, $order_id);
-        
-        if ($stmt->execute()) {
-            $_SESSION['message'] = "Order status updated successfully!";
-        } else {
-            $_SESSION['error'] = "Error updating order status.";
-        }
-        
-        header("Location: orders.php");
-        exit();
+    $update_sql = "UPDATE orders SET status = ? WHERE id = ?";
+    $stmt = $conn->prepare($update_sql);
+    $stmt->bind_param("si", $status, $order_id);
+    
+    if ($stmt->execute()) {
+        $_SESSION['message'] = "Order status updated successfully!";
+    } else {
+        $_SESSION['error'] = "Error updating order status.";
     }
+    
+    header("Location: orders.php");
+    exit();
 }
 
 // Get orders with pagination
@@ -72,10 +70,17 @@ $total_orders = $stmt->get_result()->fetch_assoc()['total'];
 $total_pages = ceil($total_orders / $per_page);
 
 // Get orders with user information
-$sql = "SELECT o.*, u.name as user_name, u.email as user_email 
-        FROM orders o 
-        JOIN users u ON o.user_id = u.id 
-        " . $where_sql . " 
+$sql = "SELECT o.*, 
+        u.name as user_name,
+        u.email as user_email,
+        COUNT(oi.id) as total_items,
+        GROUP_CONCAT(CONCAT(oi.quantity, 'x ', p.name) SEPARATOR ', ') as items
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+        LEFT JOIN order_items oi ON o.id = oi.order_id
+        LEFT JOIN products p ON oi.product_id = p.id
+        " . $where_sql . "
+        GROUP BY o.id, o.user_id, o.total_amount, o.status, o.created_at, u.name, u.email
         ORDER BY o.created_at DESC 
         LIMIT ? OFFSET ?";
 
@@ -163,7 +168,7 @@ $statuses = $conn->query("SELECT DISTINCT status FROM orders ORDER BY status")->
                     </a>
                 </div>
                 <div class="pt-4 mt-4 border-t border-green-700/50">
-                    <a href="../auth/logout.php" class="sidebar-link group text-red-300 hover:bg-red-700/50">
+                    <a href="../auth/logout.php" class="sidebar-link group text-red-300">
                         <i class="fas fa-sign-out-alt text-lg group-hover:scale-110 transition-transform"></i>
                         <span>Logout</span>
                     </a>
@@ -213,7 +218,7 @@ $statuses = $conn->query("SELECT DISTINCT status FROM orders ORDER BY status")->
             <div class="p-6">
                 <!-- Search and Filter -->
                 <div class="bg-white rounded-lg shadow-md p-4 mb-6">
-                    <form class="flex flex-wrap items-center gap-4">
+                    <form action="orders.php" method="GET" class="flex flex-wrap items-center gap-4">
                         <div class="flex-1 min-w-[200px]">
                             <input type="text" name="search" placeholder="Search by order ID, customer name or email" 
                                    value="<?php echo htmlspecialchars($search); ?>"
@@ -243,9 +248,10 @@ $statuses = $conn->query("SELECT DISTINCT status FROM orders ORDER BY status")->
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                             </tr>
                         </thead>
@@ -266,42 +272,42 @@ $statuses = $conn->query("SELECT DISTINCT status FROM orders ORDER BY status")->
                                     <div class="text-sm text-gray-900"><?php echo htmlspecialchars($order['user_name']); ?></div>
                                     <div class="text-sm text-gray-500"><?php echo htmlspecialchars($order['user_email']); ?></div>
                                 </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900"><?php echo $order['items']; ?></div>
+                                    <div class="text-sm text-gray-500">Total Items: <?php echo $order['total_items']; ?></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">₹<?php echo number_format($order['total_amount'], 2); ?></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-block px-3 py-1 rounded-full text-sm 
+                                        <?php echo $order['status'] === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                            ($order['status'] === 'processing' ? 'bg-blue-100 text-blue-800' : 
+                                            ($order['status'] === 'shipped' ? 'bg-purple-100 text-purple-800' : 
+                                            ($order['status'] === 'delivered' ? 'bg-green-100 text-green-800' : 
+                                            'bg-red-100 text-red-800'))); ?>">
+                                        <?php echo ucfirst($order['status']); ?>
+                                    </span>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm text-gray-900">
-                                        <?php echo date('M d, Y', strtotime($order['created_at'])); ?>
+                                        <?php echo date('M j, Y', strtotime($order['created_at'])); ?>
                                     </div>
                                     <div class="text-sm text-gray-500">
-                                        <?php echo date('h:i A', strtotime($order['created_at'])); ?>
+                                        <?php echo date('g:i A', strtotime($order['created_at'])); ?>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">
-                                        ₹<?php echo number_format($order['total_amount'], 2); ?>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <form method="POST" class="flex items-center space-x-2">
+                                    <form action="orders.php" method="POST" class="inline">
                                         <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                                        <input type="hidden" name="action" value="update_status">
-                                        <select name="new_status" 
-                                                onchange="this.form.submit()"
-                                                class="text-sm border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-green-500
-                                                       <?php echo $order['status'] === 'pending' ? 'status-pending' : 
-                                                                 ($order['status'] === 'processing' ? 'status-processing' : 
-                                                                 ($order['status'] === 'completed' ? 'status-completed' : 
-                                                                 'status-cancelled')); ?>">
+                                        <select name="status" onchange="this.form.submit()" 
+                                                class="text-sm border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-green-500">
                                             <option value="pending" <?php echo $order['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
                                             <option value="processing" <?php echo $order['status'] === 'processing' ? 'selected' : ''; ?>>Processing</option>
-                                            <option value="completed" <?php echo $order['status'] === 'completed' ? 'selected' : ''; ?>>Completed</option>
-                                            <option value="cancelled" <?php echo $order['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                                            <option value="shipped" <?php echo $order['status'] === 'shipped' ? 'selected' : ''; ?>>Shipped</option>
+                                            <option value="delivered" <?php echo $order['status'] === 'delivered' ? 'selected' : ''; ?>>Delivered</option>
                                         </select>
                                     </form>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <a href="view_order.php?id=<?php echo $order['id']; ?>" 
-                                       class="text-blue-600 hover:text-blue-900 mr-3">
-                                        <i class="fas fa-eye"></i> View
-                                    </a>
                                 </td>
                             </tr>
                             <?php endforeach; ?>

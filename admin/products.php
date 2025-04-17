@@ -153,7 +153,7 @@ $categories = $conn->query("SELECT DISTINCT category FROM products ORDER BY cate
                     </a>
                 </div>
                 <div class="pt-4 mt-4 border-t border-green-700/50">
-                    <a href="../auth/logout.php" class="sidebar-link group text-red-300 hover:bg-red-700/50">
+                    <a href="../auth/logout.php" class="sidebar-link group text-red-300">
                         <i class="fas fa-sign-out-alt text-lg group-hover:scale-110 transition-transform"></i>
                         <span>Logout</span>
                     </a>

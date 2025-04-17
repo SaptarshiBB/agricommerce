@@ -113,7 +113,7 @@ $low_stock_products = $conn->query("
                     </a>
                 </div>
                 <div class="pt-4 mt-4 border-t border-green-700/50">
-                    <a href="../auth/logout.php" class="sidebar-link group text-red-300 hover:bg-red-700/50">
+                    <a href="../auth/logout.php" class="sidebar-link group text-red-300">
                         <i class="fas fa-sign-out-alt text-lg group-hover:scale-110 transition-transform"></i>
                         <span>Logout</span>
                     </a>
@@ -228,7 +228,7 @@ $low_stock_products = $conn->query("
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold">Recent Orders</h3>
-                        <a href="#orders" class="text-green-600 hover:text-green-700">View All</a>
+                        <a href="orders.php" class="text-green-600 hover:text-green-700">View All</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full">
@@ -265,7 +265,7 @@ $low_stock_products = $conn->query("
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-lg font-semibold">Low Stock Products</h3>
-                        <a href="#products" class="text-green-600 hover:text-green-700">View All</a>
+                        <a href="products.php" class="text-green-600 hover:text-green-700">View All</a>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="min-w-full">
@@ -274,7 +274,6 @@ $low_stock_products = $conn->query("
                                     <th class="pb-3">Product</th>
                                     <th class="pb-3">Category</th>
                                     <th class="pb-3">Stock</th>
-                                    <th class="pb-3">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -286,11 +285,6 @@ $low_stock_products = $conn->query("
                                         <span class="px-2 py-1 rounded-full text-xs bg-red-100 text-red-800">
                                             <?php echo $product['stock']; ?> left
                                         </span>
-                                    </td>
-                                    <td>
-                                        <button class="text-green-600 hover:text-green-700">
-                                            <i class="fas fa-plus"></i> Restock
-                                        </button>
                                     </td>
                                 </tr>
                                 <?php endforeach; ?>

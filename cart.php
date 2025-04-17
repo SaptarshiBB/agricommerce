@@ -40,7 +40,10 @@ foreach ($cart_items as $item) {
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="index.php" class="text-2xl font-bold">AgriCommerce</a>
+                    <a href="index.php" class="flex items-center space-x-2">
+                        <i class="fas fa-leaf text-2xl"></i>
+                        <span class="text-2xl font-bold">AgriCommerce</span>
+                    </a>
                 </div>
                 <div class="flex items-center space-x-4">
                     <span>Welcome, <?php echo htmlspecialchars($_SESSION['user_name']); ?></span>
@@ -52,7 +55,12 @@ foreach ($cart_items as $item) {
 
     <!-- Cart Section -->
     <div class="container mx-auto px-6 py-8">
-        <h1 class="text-3xl font-bold mb-8">Your Shopping Cart</h1>
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-bold">Your Shopping Cart</h1>
+            <a href="index.php" class="text-green-600 hover:text-green-800">
+                <i class="fas fa-arrow-left mr-2"></i>Continue Shopping
+            </a>
+        </div>
 
         <?php if (isset($_SESSION['message'])): ?>
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -137,11 +145,9 @@ foreach ($cart_items as $item) {
                             <a href="index.php" class="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600">
                                 Continue Shopping
                             </a>
-                            <form action="checkout.php" method="POST">
-                                <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
-                                    Proceed to Checkout
-                                </button>
-                            </form>
+                            <a href="checkout.php" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
+                                Proceed to Checkout
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -149,20 +155,9 @@ foreach ($cart_items as $item) {
         <?php endif; ?>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-green-600 text-white mt-12">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div>
-                    <p>&copy; 2024 AgriCommerce. All rights reserved.</p>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="hover:text-green-200">About Us</a>
-                    <a href="#" class="hover:text-green-200">Contact</a>
-                    <a href="#" class="hover:text-green-200">Terms of Service</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 </html> 

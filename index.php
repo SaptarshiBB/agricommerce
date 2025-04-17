@@ -119,7 +119,7 @@ if (isset($_SESSION['user_id'])) {
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex space-x-4">
                 <!-- <span><i class="fas fa-globe mr-1"></i> English</span> -->
-                <!-- <span><i class="fas fa-truck mr-1"></i> Track Order</span> -->
+                <a href="orders.php" class="hover:text-green-200"><i class="fas fa-truck mr-1"></i> Track Order</a>
                 <!-- <span><i class="fas fa-heart mr-1"></i> Wishlist</span> -->
             </div>
             <div class="flex space-x-4">
@@ -146,7 +146,10 @@ if (isset($_SESSION['user_id'])) {
         <div class="container mx-auto px-6 py-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <a href="index.php" class="text-2xl font-bold text-green-600">AgriCommerce</a>
+                    <a href="index.php" class="flex items-center space-x-2">
+                        <i class="fas fa-leaf text-2xl text-green-600"></i>
+                        <span class="text-2xl font-bold text-green-600">AgriCommerce</span>
+                    </a>
                 </div>
                 
                 <div class="hidden md:flex items-center space-x-8">
@@ -194,7 +197,7 @@ if (isset($_SESSION['user_id'])) {
             <p class="text-xl md:text-2xl mb-8">Premium Agricultural Products for Maximum Yield</p>
             <div class="flex justify-center space-x-4">
                 <a href="#products" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-medium transition duration-300">Shop Now</a>
-                <a href="#" class="bg-white hover:bg-gray-100 text-green-600 px-8 py-3 rounded-full font-medium transition duration-300">About Us</a>
+                <a href="about.php" class="bg-white hover:bg-gray-100 text-green-600 px-8 py-3 rounded-full font-medium transition duration-300">About Us</a>
             </div>
         </div>
     </div>
@@ -280,33 +283,39 @@ if (isset($_SESSION['user_id'])) {
                 <?php foreach ($products as $index => $product): ?>
                     <div class="product-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300" 
                          data-aos="fade-up" data-aos-delay="<?php echo ($index % 4) * 100; ?>">
-                        <div class="relative">
-                            <img src="<?php echo htmlspecialchars($product['image']); ?>" 
-                                 alt="<?php echo htmlspecialchars($product['name']); ?>"
-                                 class="w-full h-48 object-cover">
-                            <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
-                                NEW
+                        <a href="product.php?id=<?php echo $product['id']; ?>" class="block">
+                            <div class="relative">
+                                <img src="<?php echo htmlspecialchars($product['image']); ?>" 
+                                     alt="<?php echo htmlspecialchars($product['name']); ?>"
+                                     class="w-full h-48 object-cover">
+                                <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">
+                                    NEW
+                                </div>
                             </div>
-                        </div>
-                        <div class="p-4">
-                            <h3 class="text-xl font-semibold mb-2"><?php echo htmlspecialchars($product['name']); ?></h3>
-                            <p class="text-gray-600 mb-4 text-sm"><?php echo htmlspecialchars($product['description']); ?></p>
-                            <div class="flex items-center justify-between">
-                                <span class="text-green-600 font-bold">₹<?php echo number_format($product['price'], 2); ?></span>
-                                <?php if (isset($_SESSION['user_id'])): ?>
-                                    <form action="cart/add.php" method="POST" class="inline">
-                                        <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                                        <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full text-sm transition duration-300">
-                                            Add to Cart
-                                        </button>
-                                    </form>
-                                <?php else: ?>
-                                    <a href="auth/login.php" class="text-green-600 hover:text-green-800 text-sm">
-                                        Login to Purchase
-                                    </a>
-                                <?php endif; ?>
+                            <div class="p-4">
+                                <h3 class="text-xl font-semibold mb-2"><?php echo htmlspecialchars($product['name']); ?></h3>
+                                <p class="text-gray-600 mb-4 text-sm"><?php echo htmlspecialchars($product['description']); ?></p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-green-600 font-bold">₹<?php echo number_format($product['price'], 2); ?></span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <div class="p-4 pt-0">
+                                <form action="cart/add.php" method="POST" class="inline">
+                                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                                    <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full text-sm transition duration-300">
+                                        Add to Cart
+                                    </button>
+                                </form>
+                            </div>
+                        <?php else: ?>
+                            <div class="p-4 pt-0">
+                                <a href="auth/login.php" class="block w-full text-center text-green-600 hover:text-green-800 text-sm">
+                                    Login to Purchase
+                                </a>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -445,10 +454,10 @@ if (isset($_SESSION['user_id'])) {
             <div class="border-t border-green-700 pt-6 flex flex-col md:flex-row justify-between items-center">
                 <p>&copy; 2025 AgriCommerce. All rights reserved.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="#" class="text-green-200 hover:text-white"><i class="fab fa-github"></i></a>
-                    <a href="#" class="text-green-200 hover:text-white"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-green-200 hover:text-white"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-green-200 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/anugrahthomas" class="text-green-200 hover:text-white"><i class="fab fa-github"></i></a>
+                    <a href="https://x.com/_anugrahthomas" class="text-green-200 hover:text-white"><i class="fab fa-twitter"></i></a>
+                    <a href="https://www.instagram.com/_anugrahthomas/" class="text-green-200 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    <a href="https://in.linkedin.com/in/anugrah-thomas-5070a9266" class="text-green-200 hover:text-white"><i class="fab fa-linkedin"></i></a>
                 </div>
             </div>
         </div>
