@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 // Fetch user's orders
 $user_id = $_SESSION['user_id'];
 $sql = "SELECT o.*, 
-        COUNT(oi.id) as total_items,
+        SUM(oi.quantity) as total_items,
         GROUP_CONCAT(CONCAT(oi.quantity, 'x ', p.name) SEPARATOR ', ') as items
         FROM orders o
         LEFT JOIN order_items oi ON o.id = oi.order_id

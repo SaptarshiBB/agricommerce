@@ -73,7 +73,7 @@ $total_pages = ceil($total_orders / $per_page);
 $sql = "SELECT o.*, 
         u.name as user_name,
         u.email as user_email,
-        COUNT(oi.id) as total_items,
+        SUM(oi.quantity) as total_items,
         GROUP_CONCAT(CONCAT(oi.quantity, 'x ', p.name) SEPARATOR ', ') as items
         FROM orders o
         LEFT JOIN users u ON o.user_id = u.id
