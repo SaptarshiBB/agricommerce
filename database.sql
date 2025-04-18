@@ -59,28 +59,28 @@ CREATE TABLE IF NOT EXISTS order_items (
 -- Insert products
 INSERT INTO products (name, description, price, category, stock, image) VALUES
 -- Seeds
-('Hybrid Tomato Seeds', 'High-yield hybrid tomato seeds with disease resistance. Ideal for warm climates.', 12.99, 'Seeds', 100, 'https://via.placeholder.com/150?text=Tomato+Seeds'),
-('Organic Spinach Seeds', 'Certified organic spinach seeds, fast germination, suitable for backyard gardening.', 4.50, 'Seeds', 100, 'https://via.placeholder.com/150?text=Spinach+Seeds'),
+('Hybrid Tomato Seeds', 'High-yield hybrid tomato seeds with disease resistance. Ideal for warm climates.', 12.99, 'Seeds', 100, 'uploads/6800e71ee2ae7.jpg'),
+('Organic Spinach Seeds', 'Certified organic spinach seeds, fast germination, suitable for backyard gardening.', 4.50, 'Seeds', 100, 'uploads/6800e81a4615c.jpg'),
 
 -- Crop Protection
-('Neem Oil Pesticide', 'Natural pesticide made from neem extract. Effective against a wide range of pests.', 8.75, 'Crop Protection', 100, 'https://via.placeholder.com/150?text=Neem+Oil'),
-('Fungal Shield Spray', 'Broad-spectrum fungicide spray for vegetable and fruit crops.', 14.20, 'Crop Protection', 100, 'https://via.placeholder.com/150?text=Fungal+Spray'),
+('Neem Oil Pesticide', 'Natural pesticide made from neem extract. Effective against a wide range of pests.', 8.75, 'Crop Protection', 100, 'uploads/6800e74f1680a.jpg'),
+('Fungal Shield Spray', 'Broad-spectrum fungicide spray for vegetable and fruit crops.', 14.20, 'Crop Protection', 100, 'uploads/6800e7617541f.jpg'),
 
 -- Nutrients
-('Nitrogen-Rich Fertilizer (NPK 20-10-10)', 'Boosts vegetative growth. Best for leafy crops.', 18.00, 'Nutrients', 100, 'https://via.placeholder.com/150?text=NPK+Fertilizer'),
-('Seaweed Extract', 'Organic plant tonic for better root and shoot development.', 11.90, 'Nutrients', 100, 'https://via.placeholder.com/150?text=Seaweed+Extract'),
+('Nitrogen-Rich Fertilizer (NPK 20-10-10)', 'Boosts vegetative growth. Best for leafy crops.', 18.00, 'Nutrients', 100, 'uploads/6800e77222307.jpg'),
+('Seaweed Extract', 'Organic plant tonic for better root and shoot development.', 11.90, 'Nutrients', 100, 'uploads/6800e78495378.jpg'),
 
 -- Equipment
-('Handheld Sprayer (5L)', 'Durable pump sprayer for applying pesticides or liquid fertilizers.', 25.00, 'Equipment', 100, 'https://via.placeholder.com/150?text=Handheld+Sprayer'),
-('Soil Moisture Meter', 'Accurate soil moisture tester. No batteries required.', 15.99, 'Equipment', 100, 'https://via.placeholder.com/150?text=Soil+Meter'),
+('Handheld Sprayer (5L)', 'Durable pump sprayer for applying pesticides or liquid fertilizers.', 25.00, 'Equipment', 100, 'uploads/6800e794a3327.jpg'),
+('Soil Moisture Meter', 'Accurate soil moisture tester. No batteries required.', 15.99, 'Equipment', 100, 'uploads/6800e7a092b8b.jpg'),
 
 -- Organic
-('Vermicompost (5kg)', 'Rich organic compost from earthworms. Improves soil health.', 9.50, 'Organic', 100, 'https://via.placeholder.com/150?text=Vermicompost'),
-('Panchagavya Plant Tonic', 'Traditional organic growth booster made from five cow products.', 7.25, 'Organic', 100, 'https://via.placeholder.com/150?text=Panchagavya'),
+('Vermicompost (5kg)', 'Rich organic compost from earthworms. Improves soil health.', 9.50, 'Organic', 100, 'uploads/6800e7af05e62.webp'),
+('Panchagavya Plant Tonic', 'Traditional organic growth booster made from five cow products.', 7.25, 'Organic', 100, 'uploads/6800e7bc495ca.webp'),
 
 -- Animal Care
-('Cattle Mineral Mix', 'Daily supplement for healthy weight gain and milk production.', 6.80, 'Animal Care', 100, 'https://via.placeholder.com/150?text=Mineral+Mix'),
-('Poultry Vitamin Tonic', 'Boosts immunity and egg production in chickens and other birds.', 5.30, 'Animal Care', 100, 'https://via.placeholder.com/150?text=Poultry+Tonic');
+('Cattle Mineral Mix', 'Daily supplement for healthy weight gain and milk production.', 6.80, 'Animal Care', 100, 'uploads/6800e7cabd283.jpg'),
+('Poultry Vitamin Tonic', 'Boosts immunity and egg production in chickens and other birds.', 5.30, 'Animal Care', 100, 'uploads/6800e7f8910e2.jpg');
 
 -- Insert default admin user (password: admin123)
 INSERT INTO users (name, email, password, role) VALUES 
